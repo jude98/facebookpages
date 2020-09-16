@@ -8,7 +8,8 @@ library.add(fab,faFacebook,faGooglePlus,faYelp, faYahoo, faFoursquare)
 //  ACTIONS
 const ACTIONS = {
     GET : 'get',
-    CHANGE : 'change-value'
+    CHANGE : 'change-details',
+    DEL : 'delete-details'
 }
 
 //  Initial State
@@ -97,6 +98,11 @@ const reducer = (listings, action) => {
                 return each
             })
             return tmpList
+
+        case ACTIONS.DEL : 
+            var newList = listings.filter(each => each.id < 5)
+            return newList
+            
         default : return listings
     }
 }

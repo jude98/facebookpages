@@ -13,7 +13,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>G R O W T H P L U G</title>
   </head>
   <body>
     <div id="root"></div>
@@ -27,7 +27,26 @@
       To begin the development, run `npm start`.
       To create a production bundle, use `npm run build`.
     -->
-
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '3672394659438713',
+          xfbml      : true,
+          version    : 'v8.0'
+        });
+        
+      };
+    
+    
+    
+      (function(d, s, id){
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) {return;}
+          js = d.createElement(s); js.id = id;
+          js.src = "https://connect.facebook.net/en_US/sdk.js";
+          fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    </script>
     
   </body>
 </html>

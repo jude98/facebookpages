@@ -1,9 +1,32 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import axios from 'axios'
-import FacebookLogin from 'react-facebook-login'
 import Auth from './Auth'
 import '../App.css'
+import { Button, Icon } from '@material-ui/core' 
+import { makeStyles } from '@material-ui/core/styles'
 import { facebookContext } from './state/UserDetails'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab, faFacebook } from '@fortawesome/free-brands-svg-icons'
+
+library.add(fab,faFacebook)
+
+const useStyles = makeStyles((theme) => ({
+    button: {
+      fontSize : '1.5rem',
+      fontWeight : '900'
+    },
+    fbicon : {
+        marginRight : 20,
+    },
+    login : {
+        backgroundColor:"black",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh"
+    }
+  }));
 
 //  The permissions to be allowed by user
 
@@ -11,6 +34,13 @@ const scope = "email,pages_manage_cta,pages_show_list,pages_read_engagement,page
 
 const Login = (props) => {
     const [ , dispatch, ACTIONS ] = useContext(facebookContext)
+    const classes = useStyles();
+
+    useEffect(() => {
+        window.FB.getLoginStatus(function(response){
+            if(response.status === 'not_authorized') alert('Try to Login after loging out of other facebook accounts in the browser')
+        })
+    },[])   
 
     // Get info of each page (location, phone, name, about, rating, mission, acces_token, id)
 
@@ -28,7 +58,7 @@ const Login = (props) => {
     // Get the info of pages handled by user
 
     const getPageInfo = (response) => {
-        axios.get(`https://graph.facebook.com/${response.userID}/accounts?access_token=${response.accessToken}`)
+        axios.get(`https://graph.facebook.com/${response.authResponse.userID}/accounts?access_token=${response.authResponse.accessToken}`)
         .then(res => {
             res.data.data.forEach(page => {
                getEachPageInfo(page)
@@ -39,36 +69,33 @@ const Login = (props) => {
 
     // Loads the users information is authorised.
 
-    const responseFacebook = (response) => {
-        console.log(response)
-        if(response.status === 'unknown' || response.status === 'not_authorized'){
-            console.log('not allowed')
-        }else{
-            Auth.login(() => {
-                props.history.push('/home')
-            })
-            
-            getPageInfo(response)
-        }
-
+    const handleLogin = () => {
+        window.FB.login(function(response){
+            if(response.status === 'not_authorized' || response.status === 'unknown') alert('User cancelled login or did not fully authorize!! Try to log out from the browser')
+            else{
+                console.log(response)
+                Auth.login(() => {
+                    props.history.push('/home')
+                })
+                getPageInfo(response)
+            }
+        },{scope : scope})
     }
         
     return(
-        <div className="login">
-            <FacebookLogin 
-                appId='3672394659438713'
-                fields="name,email,picture"
-                scope={scope}
-                callback={responseFacebook}
-                icon="fa-facebook"
-            />
+        <div className={classes.login}>
+            <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            className={classes.button}
+            onClick={handleLogin}
+            startIcon={<FontAwesomeIcon className={classes.fbicon} icon={['fab','facebook-f']} />}
+      >
+        Login With Facebook
+      </Button>
         </div>
-    )
-
-    
-
-   
-    
+    )    
 }
 
 export default Login

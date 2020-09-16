@@ -21,6 +21,7 @@ const initialState = [
         about : "Best Dental",
         address : "2101 California St",
         phone : "111.111.1111",
+        mission : 'Provide Best Care',
         rating : "3/5",
         listed : true,
     },
@@ -32,6 +33,7 @@ const initialState = [
         about : "Best Dental Care",
         address : "2101 California St",
         phone : "111.111.1111",
+        mission : 'Healthy Thooths',
         rating : "2/5",
         listed : false,
     },
@@ -43,8 +45,9 @@ const initialState = [
         about : "Dental in DownTown!",
         address : "2101 California St",
         phone : "111.111.1111",
+        mission : 'Provide Best Care',
         rating : "3/5",
-        listed : false,
+        listed : true,
     },
     {
         id : "4",
@@ -54,6 +57,7 @@ const initialState = [
         about : "Its ABC Dental",
         address : "2101 California St",
         phone : "111.111.1111",
+        mission : 'Healthy Thooths',
         rating : "3/5",
         listed : false,
     }
@@ -62,9 +66,9 @@ const initialState = [
 // REDUCER function (GET and UPDATE)
 const reducer = (listings, action) => {
     switch (action.type) {
-        // GET 
+        // GET When login state is updated by fetching info from user's page
         case ACTIONS.GET : 
-            var {location, phone, name, about, overall_star_rating, access_token, id} = action.payload.details
+            var {location, phone, name, about, overall_star_rating, mission, access_token, id} = action.payload.details
             var [...newList] = listings
             const pageInfo = {
                 id : id,
@@ -75,19 +79,20 @@ const reducer = (listings, action) => {
                 about : about,
                 address : location.street,
                 phone : phone,
-                rating : `${overall_star_rating}/5`,
-                listed : false
+                mission : mission,
+                rating : overall_star_rating ? `${overall_star_rating}/5` : 'No rating yet',
+                listed : true
             }
             newList.push(pageInfo)
                 
             return newList
 
-        // UPDATE
+        // UPDATE When the Update button is clicked and state is updated. Update on facebook page is done at Row Component
         case ACTIONS.CHANGE :
-            var {about, phone, id} = action.payload
+            var {about, phone, mission, id} = action.payload
             const tmpList = listings.map(each => {
                 if(each.id === id) {
-                    return {...each,about:about,phone:phone}
+                    return {...each,about:about,phone:phone,mission:mission}
                 }
                 return each
             })
@@ -96,6 +101,7 @@ const reducer = (listings, action) => {
     }
 }
 
+// State is available for all the components
 export const facebookContext = createContext()
 
 export const UserDetailsProvider = ({ children }) => {

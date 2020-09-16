@@ -42,6 +42,7 @@ const Listings = () => {
                             <TableCell align="center">Source</TableCell>
                             <TableCell align="center">Name</TableCell>
                             <TableCell align="center">About</TableCell>
+                            <TableCell align="center">Mission</TableCell>
                             <TableCell align="center">Address</TableCell>
                             <TableCell align="center">Phone</TableCell>
                             <TableCell align="center">Rating</TableCell>

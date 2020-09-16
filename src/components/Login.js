@@ -12,11 +12,12 @@ const scope = "email,pages_manage_cta,pages_show_list,pages_read_engagement,page
 const Login = (props) => {
     const [ , dispatch, ACTIONS ] = useContext(facebookContext)
 
-    // Get info of each page (location, phone, name, about, rating, acces_token, id)
+    // Get info of each page (location, phone, name, about, rating, mission, acces_token, id)
 
     const getEachPageInfo = page => {
         const cancelToken = axios.CancelToken.source()
-        axios.get(`https://graph.facebook.com/${page.id}?fields=location,phone,name,about,overall_star_rating,access_token&access_token=${page.access_token}`,{cancelToken:cancelToken.token})
+        axios.get(`https://graph.facebook.com/${page.id}?fields=location,phone,name,about,overall_star_rating,mission,access_token&access_token=${page.access_token}`,
+        {cancelToken:cancelToken.token})
         .then(response => {
             dispatch({type : ACTIONS.GET, payload : {details : response.data}})
         })

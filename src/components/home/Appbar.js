@@ -27,7 +27,6 @@ const useStyles = makeStyles({
 const Appbar = ({handleLogout}) => {
     const classes = useStyles()
 
-    
     return(
         <AppBar position="fixed" className={classes.app}>
             <div className={classes.form}>

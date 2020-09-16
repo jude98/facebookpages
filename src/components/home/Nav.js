@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Drawer, List, Typography, Divider, ListItem, ListItemText, ListItemIcon } from '@material-ui/core'
 import { Home, Web, Mouse, Star, List as ListIcon, EventAvailable, Settings } from '@material-ui/icons'
 
-//  Default nav items
+//  Default nav items and default set to Listings and others are invalid
 
 const navItems = [
     {

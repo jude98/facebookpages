@@ -11,34 +11,49 @@ const Row = ({ listing }) => {
     const [ edit, setEdit ] = useState(false)
     const [ about ,setAbout ] = useState(listing.about)
     const [ phone, setPhone ] = useState(listing.phone)
+    const [ mission, setMission ] = useState(listing.mission)
     
-    // Handle the update (only few feilds can be updated)
+    // Handle the update (about, phone and mission are updatable fields)
     const handleUpdate = () => {
         setEdit(prev => !prev)
         if(listing.id > 4) {
-            axios.post(`https://graph.facebook.com/${listing.id}?about=${about}&phone=${phone}&access_token=${listing.access_token}`)
-            .then(response => console.log(response))
+            axios.post(`https://graph.facebook.com/${listing.id}?about=${about}&phone=${phone}&mission=${mission}&access_token=${listing.access_token}`)
+            .then(response => {
+                if(response.status === 200) {
+                    dispatch({type: ACTIONS.CHANGE, payload:{about : about, phone : phone, mission : mission,  id : listing.id}})
+                    alert('Successfully Updated')
+                }
+                else alert("Couldn't Update.. Status : "+response.status)
+            })
         }
-        dispatch({type: ACTIONS.CHANGE, payload:{about : about, phone : phone, id : listing.id}})
+        else dispatch({type: ACTIONS.CHANGE, payload:{about : about, phone : phone, mission : mission,  id : listing.id}})
+        
     }
     
+    //  When Edit icon is clicked, edit state changes to true
     const handleEdit = () => {
         setEdit(prev => !prev)
     }
     
+    //  To cancel the edit. The cross symbol
     const handleCancel = () => {
         setAbout(listing.name)
         setPhone(listing.phone)
+        // edit state changes to false
         setEdit(prev => !prev)
     }
 
     return(
         <React.Fragment>
+            {/* ICON  */}
             <TableCell align="center" style={{fontSize : '1.4rem'}}>
                 {listing.icon}
             </TableCell>
+            {/* SOURCE */}
             <TableCell align="center">{listing.source}</TableCell>
+            {/* NAME */}
             <TableCell align="center">{listing.name}</TableCell>
+            {/* ABOUT. Editable */}
             <TableCell align="center">
                 {edit ? 
                     <TextField 
@@ -49,7 +64,20 @@ const Row = ({ listing }) => {
                     /> : 
                     listing.about}
             </TableCell>
+            {/* MISSION. Editable */}
+            <TableCell align="center">
+                {edit ? 
+                    <TextField 
+                        name='mission' 
+                        value={mission} 
+                        onChange={e => setMission(e.target.value)} 
+                        color='secondary'
+                    /> : 
+                    listing.mission}
+            </TableCell>
+            {/* ADDRESS */}
             <TableCell align="center">{listing.address}</TableCell>
+            {/* PHONE. Editable */}
             <TableCell align="center">
                 {edit ? 
                     <TextField 
@@ -60,8 +88,11 @@ const Row = ({ listing }) => {
                     /> : 
                     listing.phone}
             </TableCell>
+            {/* RATING */}
             <TableCell align="center">{listing.rating}</TableCell>
+            {/* LISTED */}
             <TableCell align="center">{listing.listed ? 'Yes': 'No'}</TableCell>
+            {/* STATUS. Can cancle the edit on cross icon */}
             <TableCell align="center">
                 {edit ?
                     <Close 
@@ -72,6 +103,7 @@ const Row = ({ listing }) => {
                     <Done style={{fontSize : 35,color: "#4caf50" }} />        
                 }
             </TableCell>
+            {/* UPDATE. Update editable fields on click */}
             <TableCell align="center">
                 {edit ? 
                     <Button 

@@ -15,6 +15,7 @@ const useStyles = makeStyles({
 const Home = (props) => {
     const classes = useStyles()
 
+    // On Logout button click home path is pushed to props.history so redirected to login page. 
     const handleLogout = () => {
         Auth.logout(() => props.history.push('/'))
     }

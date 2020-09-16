@@ -1,7 +1,7 @@
 import React from 'react'
 import Login from './components/Login'
 import RestrictedRoute from './components/RestrictedRoute'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 import { UserDetailsProvider } from './components/state/UserDetails' 
 import Home from './components/Home'
 
